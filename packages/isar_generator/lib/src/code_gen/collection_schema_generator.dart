@@ -6,6 +6,7 @@ import 'package:isar_generator/src/object_info.dart';
 
 String generateSchema(ObjectInfo object) {
   var code = 'const ${object.dartName.capitalize()}Schema = ';
+  var isWeb = kIsWeb;
   if (!object.isEmbedded) {
     code += 'CollectionSchema(';
   } else {
@@ -20,7 +21,7 @@ String generateSchema(ObjectInfo object) {
 
   code += '''
     name: r'${object.isarName}',
-    id: ${BigInt.parse(object.id.toString())/2},
+    id: ${isWeb ? BigInt.parse(object.id.toString()).toUnsigned(36) : object.id},
     properties: {$properties},
 
     estimateSize: ${object.estimateSizeName},
